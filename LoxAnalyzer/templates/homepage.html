@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home page</title>
+    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+
+    <div class="contrainer">
+
+    <header>
+        <h1>LOX-analyzer</h1>
+    </header>
+
+    <form action = "/dbsearch" method = "POST">
+        <input type="text" name="searchword"/>
+        <input type="submit" name="Submit"/>
+    </form>
+
+        <footer>Copyright &copy; <a href="https://www.linkedin.com/in/daan-gilissen-131735133/">D. Gilissen</a></footer>
+
+    </div>
+
+</body>
+</html>

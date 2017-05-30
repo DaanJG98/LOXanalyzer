@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Resultpage</title>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {background-color: #dddddd;}
+        tr:nth-hover {background-color: #4d4d4d; color;white;}
+</style>
+
+</head>
+<body>
+    <form action = "/dbsearch" method = "POST">
+        <input type="text" name="searchword"/>
+        <input type="submit" name="Submit"/>
+    </form>
+
+    <table>
+        <tr>
+            <th>LOX</th>
+            <th>Applicatie(s)</th>
+            <th>Artikel</th>
+            <th>Datum publicatie</th>
+            <th>Auteur(s)</th>
+            <th>Keywords</th>
+            <th>Organisme</th>
+            <th>Sequentie</th>
+        </tr>
+
+
+        {% for row in resultlist %}
+            {% set lox = row[0] %}
+            {% set app = row[1] %}
+            {% set art = row[2] %}
+            {% set date = row[3] %}
+            {% set aut = row[4] %}
+            {% set key = row[5] %}
+            {% set org = row[6] %}
+            {% set seq = row[7] %}
+
+            <tr>
+                <td>{{lox}}</td>
+                <td>{{app}}</td>
+                <td> <a href = 'https://www.ncbi.nlm.nih.gov/pubmed/{{art}}'>{{art}}</a></td>
+                <td>{{date}}</td>
+                <td>{{aut}}</td>
+                <td>{{key}}</td>
+                <td>{{org}}</td>
+                <td><a href = 'https://www.ncbi.nlm.nih.gov/protein/{{seq}}'>{{seq}}</a></td>
+            </tr>
+        {% endfor %}
+
+    </table>
+
+</body>
+</html>
