@@ -52,8 +52,8 @@
 
             <tr>
                 <td>{{lox}}</td>
-                <td>{{app}}</td>
-                <td> <a href = 'https://www.ncbi.nlm.nih.gov/pubmed/{{art}}'>{{art}}</a></td>
+                <td><a href = "{{ url_for('Graph') }}">{{app}}</a></td>
+                <td><a href = 'https://www.ncbi.nlm.nih.gov/pubmed/{{art}}'>{{art}}</a></td>
                 <td>{{date}}</td>
                 <td>{{aut}}</td>
                 <td>{{key}}</td>
@@ -61,6 +61,7 @@
                 <td><a href = 'https://www.ncbi.nlm.nih.gov/protein/{{seq}}'>{{seq}}</a></td>
             </tr>
         {% endfor %}
+
 
     </table>
 

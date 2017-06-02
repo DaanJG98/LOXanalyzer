@@ -29,28 +29,30 @@ def search():
 
     result = cursor.fetchall()
     result = [list(row) for row in result]
-    for x in range(0, len(result)):
-        if not resultslist:
-            resultslist.append(result[x])
-            print(resultslist)
-        # else:
-        #     if result[x][0] in resultslist[x][0]:
-        #         for i in range(0, len(result[x])):
-        #             resultslist[x][i].append(result[x][i])
 
-    print(resultslist[0])
+    # for x in range(0, len(result)):
+    #     print(result[x])
 
     demolijst = [('13-LOX', 'Bleken', '27403427', '2017', 'Gilissen D.', 'defense, herbivore, oxylipin', 'Kutkikker', 'AOM81152.1'),
                  ('15-LOX', 'Bleken', '27403427',  '2015', 'Rademaker K.', 'defense, herbivore, oxylipin', 'Ander beest',
                   'AOM81152.1')]
 
-    return render_template('resultspage.html', resultlist = demolijst)
+    return render_template('resultspage.html', resultlist = result)
 
 
-def results(text):
-    text = text + "abc"
-    return text
-    # return render_template('resultspage.html')
+@app.route('/Graph', methods=['POST', 'GET'])
+def Graph():
+    db = cx_Oracle.connect('owe7_pg2', 'blaat1234', 'cytosine.nl:1521/XE')
+    cursor = db.cursor()
+    cursor.execute('''
+                    SELECT * 
+                    FROM APPLICATIE
+                    WHERE ...''')
+
+
+
+    testlijst = ['Bleeching', 'Lipoxygenase', '13-LOX', 'Cancer stuff', 'improve grain qualities']
+    return render_template('Graphpage.html', lijst = testlijst)
 
 
 if __name__ == '__main__':

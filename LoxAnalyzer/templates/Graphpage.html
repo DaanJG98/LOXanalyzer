@@ -1,0 +1,53 @@
+<!DOCTYPE html> <!-- HTML5 document type -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.20.0/vis.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.20.0/vis.min.css" rel="stylesheet" type="text/css" />
+
+    <style type="text/css">
+        #mynetwork {
+            width: 600px;
+            height: 400px;
+            border: 1px solid lightgray;
+        }
+    </style>
+</head>
+<body>
+    <div id="mynetwork"></div>
+
+    <script type="text/javascript">
+    var wordslist = {{ lijst|tojson }};
+
+    var nodes = new vis.DataSet([]);
+    var i = 0;
+    while (i < wordslist.length){
+        nodes.add({id: i, label: wordslist[i]});
+        i++;
+    }
+
+     // create an array with edges
+     var edges = new vis.DataSet([
+        {from: 1, to: 3, label:'500'},
+        {from: 1, to: 2, label:'253'},
+        {from: 2, to: 4, label:'120'},
+        {from: 2, to: 5, label:'53'}
+     ]);
+
+     // create a network
+     var container = document.getElementById('mynetwork');
+
+     // provide the data in the vis format
+     var data = {
+        nodes: nodes,
+        edges: edges
+     };
+     var options = {};
+
+     // initialize your network!
+     var network = new vis.Network(container, data, options);
+    </script>
+
+</body>
+</html>
