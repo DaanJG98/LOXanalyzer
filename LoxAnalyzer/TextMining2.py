@@ -54,6 +54,7 @@ def cross_reference(keyword, application):
         print("--DEBUG-- Results found for", keyword, "with", application)
     else:
         print("--DEBUG-- No results found for", keyword, "with", application)
+
 # Voert de vergelijking uit tussen keyword en applicatie.
 
 for keyword in keywords:
