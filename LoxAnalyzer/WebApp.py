@@ -30,8 +30,8 @@ def search():
     result = cursor.fetchall()
     result = [list(row) for row in result]
 
-    # for x in range(0, len(result)):
-    #     print(result[x])
+    for x in range(0, len(result)):
+        print(result[x])
 
     demolijst = [('13-LOX', 'Bleken', '27403427', '2017', 'Gilissen D.', 'defense, herbivore, oxylipin', 'Kutkikker', 'AOM81152.1'),
                  ('15-LOX', 'Bleken', '27403427',  '2015', 'Rademaker K.', 'defense, herbivore, oxylipin', 'Ander beest',
@@ -42,17 +42,25 @@ def search():
 
 @app.route('/Graph', methods=['POST', 'GET'])
 def Graph():
-    db = cx_Oracle.connect('owe7_pg2', 'blaat1234', 'cytosine.nl:1521/XE')
-    cursor = db.cursor()
-    cursor.execute('''
-                    SELECT * 
-                    FROM APPLICATIE
-                    WHERE ...''')
+    # db = cx_Oracle.connect('owe7_pg2', 'blaat1234', 'cytosine.nl:1521/XE')
+    # cursor = db.cursor()
+    # cursor.execute('''
+    #                 SELECT *
+    #                 FROM APPLICATIE
+    #                 WHERE ...''')
+    #
+    #
 
+    graphlist = list()
 
+    wordlist = ['Bleeching', 'Lipoxygenase', '13-LOX', 'Cancer stuff', 'improve grain qualities']
+    countlist = ['500', '253', '120', '53']
+    edgelist = [[0,2],[1,2],[1,3],[2,4]]
+    graphlist.append(wordlist)
+    graphlist.append(countlist)
+    graphlist.append(edgelist)
 
-    testlijst = ['Bleeching', 'Lipoxygenase', '13-LOX', 'Cancer stuff', 'improve grain qualities']
-    return render_template('Graphpage.html', lijst = testlijst)
+    return render_template('Graphpage.html', lijst = graphlist)
 
 
 if __name__ == '__main__':

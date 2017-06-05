@@ -18,7 +18,9 @@
     <div id="mynetwork"></div>
 
     <script type="text/javascript">
-    var wordslist = {{ lijst|tojson }};
+    var wordslist = {{ lijst[0]|tojson }};
+    var countlist = {{lijst[1]|tojson }};
+    var edgelist = {{lijst[2]|tojson }};
 
     var nodes = new vis.DataSet([]);
     var i = 0;
@@ -27,26 +29,25 @@
         i++;
     }
 
-     // create an array with edges
-     var edges = new vis.DataSet([
-        {from: 1, to: 3, label:'500'},
-        {from: 1, to: 2, label:'253'},
-        {from: 2, to: 4, label:'120'},
-        {from: 2, to: 5, label:'53'}
-     ]);
+    var edges = new vis.DataSet([]);
+    var x = 0;
+    while (x<countlist.length){
+        edges.add({from: edgelist[x][0], to: edgelist[x][1], label: countlist[x]});
+        x++;
+    }
 
-     // create a network
-     var container = document.getElementById('mynetwork');
+    // create a network
+    var container = document.getElementById('mynetwork');
 
-     // provide the data in the vis format
-     var data = {
+    // provide the data in the vis format
+    var data = {
         nodes: nodes,
         edges: edges
-     };
-     var options = {};
+    };
+    var options = {};
 
-     // initialize your network!
-     var network = new vis.Network(container, data, options);
+    // initialize your network!
+    var network = new vis.Network(container, data, options);
     </script>
 
 </body>
