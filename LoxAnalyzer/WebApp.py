@@ -54,8 +54,8 @@ def Graph():
     graphlist = list()
 
     wordlist = ['Bleeching', 'Lipoxygenase', '13-LOX', 'Cancer stuff', 'improve grain qualities']
-    countlist = ['500', '253', '120', '53']
-    edgelist = [[0,2],[1,2],[1,3],[2,4]]
+    countlist = ['500', '253', '120', '53', '15']
+    edgelist = [['Bleeching','13-LOX'],['Lipoxygenase','13-LOX'],['Lipoxygenase','Cancer stuff'],['13-LOX','improve grain qualities'],['Cancer stuff','Bleeching']]
     graphlist.append(wordlist)
     graphlist.append(countlist)
     graphlist.append(edgelist)

@@ -8,8 +8,8 @@
 
     <style type="text/css">
         #mynetwork {
-            width: 600px;
-            height: 400px;
+            width: 1890px;
+            height: 920px;
             border: 1px solid lightgray;
         }
     </style>
@@ -22,16 +22,18 @@
     var countlist = {{lijst[1]|tojson }};
     var edgelist = {{lijst[2]|tojson }};
 
+    // create and add nodes
     var nodes = new vis.DataSet([]);
     var i = 0;
     while (i < wordslist.length){
-        nodes.add({id: i, label: wordslist[i]});
+        nodes.add({id: wordslist[i], label: wordslist[i]});
         i++;
     }
 
+    // create and add edges
     var edges = new vis.DataSet([]);
     var x = 0;
-    while (x<countlist.length){
+    while (x<edgelist.length){
         edges.add({from: edgelist[x][0], to: edgelist[x][1], label: countlist[x]});
         x++;
     }
