@@ -23,23 +23,18 @@
     var edgelist = {{lijst[2]|tojson }};
 
     var nodes = new vis.DataSet([]);
-    nodes.add({id: "5-LOX", label: "5-LOX"});
-    nodes.add({id: "bleaching", label: "bleaching"});
-
-    <!--var i = 0;-->
-    <!--while (i < wordslist.length){-->
-        <!--nodes.add({id: wordslist[i], label: wordslist[i]});-->
-        <!--i++;-->
-    <!--}-->
+    var i = 0;
+    while (i < wordslist.length){
+        nodes.add({id: i, label: wordslist[i]});
+        i++;
+    }
 
     var edges = new vis.DataSet([]);
-    edges.add({from: "5-LOX", to: "bleaching", label: "29"});
-
-    <!--var x = 0;-->
-    <!--while (x<countlist.length){-->
-        <!--edges.add({from: edgelist[x][0], to: edgelist[x][1], label: countlist[x]});-->
-        <!--x++;-->
-    <!--}-->
+    var x = 0;
+    while (x<countlist.length){
+        edges.add({from: edgelist[x][0], to: edgelist[x][1], label: countlist[x]});
+        x++;
+    }
 
     // create a network
     var container = document.getElementById('mynetwork');
