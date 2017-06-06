@@ -14,34 +14,33 @@ def search():
     resultslist = list()
     text = request.form["searchword"]
 
-    # db = cx_Oracle.connect('owe7_pg2', 'blaat1234', 'cytosine.nl:1521/XE')
-    # cursor = db.cursor()
-    # cursor.execute('''
-    #                 SELECT SOORT_LOX.NAAM, APPLICATIE.NAAM, PUBLICATIE.PUBMEDID, PUBLICATIE.DATUM, AUTEUR.NAAM, KEYWORDS.WOORD, ORGANISME.NAAM, SEQUENTIE.VERSION_ID
-    #                 FROM SOORT_LOX, APPLICATIE, PUBLICATIE, AUTEUR, KEYWORDS, ORGANISME, SEQUENTIE, RELATION_2, RELATION_3, RELATION_6, RELATION_7
-    #                 WHERE APPLICATIE.APPLICATIE_ID = RELATION_6.APPLICATIE_APPLICATIE_ID AND SOORT_LOX.SOORT_LOX_ID = RELATION_6.SOORT_LOX_SOORT_LOX_ID
-    #                 AND PUBLICATIE.PUBLICATIE_ID = RELATION_7.PUBLICATIE_PUBLICATIE_ID AND APPLICATIE.APPLICATIE_ID = RELATION_7.APPLICATIE_APPLICATIE_ID
-    #                 AND PUBLICATIE.PUBLICATIE_ID = RELATION_2.PUBLICATIE_PUBLICATIE_ID AND AUTEUR.AUTEUR_ID = RELATION_2.AUTEUR_AUTEUR_ID
-    #                 AND KEYWORDS.KEYWORDS_ID = RELATION_3.KEYWORDS_KEYWORDS_ID AND PUBLICATIE.PUBLICATIE_ID = RELATION_3.PUBLICATIE_PUBLICATIE_ID
-    #                 AND ORGANISME.ORGANISME_ID = SEQUENTIE.ORGANISME_ORGANISME_ID
-    #                 AND SEQUENTIE.SOORT_LOX_SOORT_LOX_ID = SOORT_LOX.SOORT_LOX_ID
-    #                 ''')
-    #
-    # result = cursor.fetchall()
-    # result = [list(row) for row in result]
-    #
-    # for x in range(0, len(result)):
-    #     print(result[x])
+    db = cx_Oracle.connect('hr', 'blaat1234', 'localhost:1521/orcl')
+    cursor = db.cursor()
+    cursor.execute('''SELECT SOORT_LOX.NAAM, APPLICATIE.APPLICATIE_ID, PUBLICATIE.PMID, PUBLICATIE.JAAR, AUTEURS.AUTEUR_NAAM, KEYWORDS.KEYWORD, ORGANISME.NAAM, SEQUENTIE.ID_VERSION 
+                      FROM SOORT_LOX, APPLICATIE, PUBLICATIE, AUTEURS, KEYWORDS, ORGANISME, SEQUENTIE, REL_KEYW_PUBL, REL_PUBL_STLOX, REL_AUT_PUBL, REL_APPL_STLOX
+                      WHERE APPLICATIE.APPLICATIE_ID = REL_APPL_STLOX.APPLICATIE_APPLICATIE_ID AND SOORT_LOX.SOORT_LOX_ID = REL_APPL_STLOX.SOORT_LOX_SOORT_LOX_ID
+                      AND PUBLICATIE.PUBLICATIE_ID = REL_PUBL_STLOX.PUBLICATIE_PUBLICATIE_ID AND SOORT_LOX.SOORT_LOX_ID = REL_PUBL_STLOX.SOORT_LOX_SOORT_LOX_ID
+                      AND PUBLICATIE.PUBLICATIE_ID = REL_AUT_PUBL.PUBLICATIE_PUBLICATIE_ID AND AUTEURS.AUTEURS_ID = REL_AUT_PUBL.AUTEURS_AUTEURS_ID
+                      AND PUBLICATIE.PUBLICATIE_ID = REL_KEYW_PUBL.PUBLICATIE_PUBLICATIE_ID AND KEYWORDS.KEYWORDS_ID = REL_KEYW_PUBL.KEYWORDS_KEYWORDS_ID
+                      AND ORGANISME.ORGANISME_ID = SEQUENTIE.ORGANISME_ORGANISME_ID
+                      AND SEQUENTIE.SOORT_LOX_SOORT_LOX_ID = SOORT_LOX.SOORT_LOX_ID
+                      ''')
+
+    result = cursor.fetchall()
+    result = [list(row) for row in result]
+
+    for x in range(0, len(result)):
+        print(result[x])
 
     demolijst = [('13-LOX', 'Bleken', '27403427', '2017', 'Gilissen D.', 'defense, herbivore, oxylipin', 'Kutkikker', 'AOM81152.1'),
                  ('15-LOX', 'Bleken', '27403427',  '2015', 'Rademaker K.', 'defense, herbivore, oxylipin', 'Ander beest',
                   'AOM81152.1')]
 
-    return render_template('resultspage.html', resultlist = demolijst)
+    return render_template('resultspage.html', resultlist = result)
 
 
-@app.route('/Graph', methods=['POST', 'GET'])
-def Graph():
+@app.route('/Graph<text>/', methods=['POST', 'GET'])
+def graph(text):
     # db = cx_Oracle.connect('owe7_pg2', 'blaat1234', 'cytosine.nl:1521/XE')
     # cursor = db.cursor()
     # cursor.execute('''
