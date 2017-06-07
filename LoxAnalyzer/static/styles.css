@@ -1,4 +1,26 @@
+body {
+    background-color: powderblue;
+}
 h1 {
-color: orange;
+color: black;
 text-align: center;
 }
+table {
+	font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td{
+	border: 1px solid #ffffff;
+    text-align: left;
+    padding: 8px;
+ }
+ th {
+    background-color: black;)
+    color: white;
+ }
+
+tr:nth-child(even) {background-color: #ffffff;}
+tr:nth-child(odd) {background-color: #d3d3d3;}
+tr:hover {background-color: #4d4d4d; color:white;}
