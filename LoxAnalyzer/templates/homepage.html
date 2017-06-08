@@ -3,22 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <title>Home page</title>
-    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+.flex-container > * {
+    padding: 15px;
+    -webkit-flex: 1 100%;
+    flex: 1 100%;
+}
+
+header {
+    background: black;
+    color:white;
+    text-align: center;
+}
+footer {
+    background: #aaa;
+    color:white;
+    text-align: center;
+    position: fixed;
+    left: 10px;
+    bottom: 10px;
+    height: 30px;
+    width: 99%;
+}
+
+.nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+.nav ul a { text-align: center;
+    text-decoration: none;
+}
+
+@media all and (min-width: 768px) {
+    footer {-webkit-order:3;order:3;}
+}
+</style>
+{#    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">#}
 </head>
 <body>
 
     <div class="contrainer">
 
-    <header>
-        <h1>LOX-analyzer</h1>
-    </header>
+        <header>
+            <h1>LOX-analyzer</h1>
+        </header>
 
-    <form action = "/dbsearch" method = "POST">
-        <input type="text" name="searchword"/>
-        <input type="submit" name="Submit"/>
-    </form>
+        <form action = "/dbsearch" method = "POST">
+            <input type="text" name="searchword"/>
+            <input type="submit" name="Submit"/>
+        </form>
 
-    <footer>Copyright &copy; <a href="https://www.linkedin.com/in/daan-gilissen-131735133/">D. Gilissen</a></footer>
+        <footer>Copyright &copy; <a href="https://www.linkedin.com/in/daan-gilissen-131735133/">D. Gilissen</a> <a href="https://www.linkedin.com/in/koen-rademaker-b826b1133/"> K. Rademaker</a></footer>
 
     </div>
 

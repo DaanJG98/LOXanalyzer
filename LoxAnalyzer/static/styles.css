@@ -2,17 +2,14 @@ body {
     background-color: powderblue;
 }
 
-header, footer {
-    padding: 1em;
-    color: white;
-    background-color: black;
-    clear: left;
-    text-align: center;
+header {
+    background: black;
+    color:white;
 }
 
 h1 {
-color: black;
-text-align: center;
+    color: orange;
+    text-align: center;
 }
 
 table {
