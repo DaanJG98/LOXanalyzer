@@ -32,14 +32,14 @@ def search():
 
 
 @app.route('/Graph<text>/', methods=['POST', 'GET'])
-def graph(text):
+def graph(LOX_ID):
     db = cx_Oracle.connect('hr', 'blaat1234', 'localhost:1521/orcl')
     cursor = db.cursor()
 
     cursor.execute("""
                      SELECT APPLICATIE.NAAM_SOORT_LOX, APPLICATIE.NAAM_APPLICATIE, APPLICATIE.RELATION_COUNT
                      FROM APPLICATIE, REL_APPL_STLOX
-                     WHERE REL_APPL_STLOX.SOORT_LOX_SOORT_LOX_ID = """+text+"""
+                     WHERE REL_APPL_STLOX.SOORT_LOX_SOORT_LOX_ID = """+LOX_ID+"""
                      AND REL_APPL_STLOX.APPLICATIE_APPLICATIE_ID = APPLICATIE.APPLICATIE_ID
                      """)
 

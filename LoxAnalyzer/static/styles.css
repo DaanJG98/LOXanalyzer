@@ -21,6 +21,6 @@ td{
     color: white;
  }
 
-tr:nth-child(even) {background-color: #ffffff;}
-tr:nth-child(odd) {background-color: #d3d3d3;}
-tr:hover {background-color: #4d4d4d; color:white;}
+td:nth-child(even) {background-color: #ffffff;}
+td:nth-child(odd) {background-color: #d3d3d3;}
+td:hover {background-color: #4d4d4d; color:white;}
