@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 import cx_Oracle
+import collections
 
 app = Flask(__name__)
 
@@ -14,7 +15,7 @@ def search():
     text = request.form["searchword"]
     db = cx_Oracle.connect('hr', 'blaat1234', 'localhost:1521/orcl')
     cursor = db.cursor()
-    cursor.execute("""SELECT SOORT_LOX.NAAM, SOORT_LOX.SOORT_LOX_ID, PUBLICATIE.PMID, PUBLICATIE.JAAR, AUTEURS.AUTEUR_NAAM, KEYWORDS.KEYWORD, ORGANISME.NAAM, SEQUENTIE.ID_VERSION 
+    cursor.execute("""SELECT SOORT_LOX.NAAM, SOORT_LOX.SOORT_LOX_ID, PUBLICATIE.PMID, PUBLICATIE.JAAR, AUTEURS.AUTEUR_NAAM, KEYWORDS.KEYWORD, ORGANISME.NAAM, SEQUENTIE.ID_VERSION
                       FROM SOORT_LOX, APPLICATIE, PUBLICATIE, AUTEURS, KEYWORDS, ORGANISME, SEQUENTIE, REL_KEYW_PUBL, REL_PUBL_STLOX, REL_AUT_PUBL, REL_APPL_STLOX
                       WHERE SOORT_LOX.NAAM like '%"""+text+"""%'
                       AND APPLICATIE.APPLICATIE_ID = REL_APPL_STLOX.APPLICATIE_APPLICATIE_ID AND SOORT_LOX.SOORT_LOX_ID = REL_APPL_STLOX.SOORT_LOX_SOORT_LOX_ID
@@ -23,12 +24,32 @@ def search():
                       AND PUBLICATIE.PUBLICATIE_ID = REL_KEYW_PUBL.PUBLICATIE_PUBLICATIE_ID AND KEYWORDS.KEYWORDS_ID = REL_KEYW_PUBL.KEYWORDS_KEYWORDS_ID
                       AND ORGANISME.ORGANISME_ID = SEQUENTIE.ORGANISME_ORGANISME_ID
                       AND SEQUENTIE.SOORT_LOX_SOORT_LOX_ID = SOORT_LOX.SOORT_LOX_ID
+                      
                       """)
 
     result = cursor.fetchall()
-    result = [list(row) for row in result]
+    resultlist = list()
+    for rij in result:
+        L = list()
+        for item in rij:
+            L.append([str(item)])
+        resultlist.append(L)
 
-    return render_template('resultspage.html', resultlist = result)
+    resultdict = collections.OrderedDict()
+    for i in range(0, len(resultlist)):
+        if resultlist[i][0][0] not in resultdict.keys():
+            resultdict[resultlist[i][0][0]]= resultlist[i][1:]
+        else:
+            for x in range(1, len(resultlist[i][1:])+1):
+                if resultlist[i][x][0] not in resultdict[resultlist[i][0][0]][x-1]:
+                    resultdict[resultlist[i][0][0]][x-1].append(resultlist[i][x][0])
+
+    print(resultdict["13-LOX"])
+    print(resultdict["15-LOX"])
+    print(resultdict["9/13-LOX"])
+
+
+    return render_template('resultspage.html', resultlist = resultlist)
 
 
 @app.route('/Graph<LOX_ID>/', methods=['POST', 'GET'])
