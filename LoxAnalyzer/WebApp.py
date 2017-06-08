@@ -31,7 +31,7 @@ def search():
     return render_template('resultspage.html', resultlist = result)
 
 
-@app.route('/Graph<text>/', methods=['POST', 'GET'])
+@app.route('/Graph<LOX_ID>/', methods=['POST', 'GET'])
 def graph(LOX_ID):
     db = cx_Oracle.connect('hr', 'blaat1234', 'localhost:1521/orcl')
     cursor = db.cursor()
