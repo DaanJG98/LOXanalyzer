@@ -27,29 +27,32 @@ def search():
                       
                       """)
 
-    result = cursor.fetchall()
+    queryresult = cursor.fetchall()
     resultlist = list()
-    for rij in result:
+    for rij in queryresult:
         L = list()
         for item in rij:
-            L.append([str(item)])
+            L.append(str(item))
         resultlist.append(L)
 
     resultdict = collections.OrderedDict()
     for i in range(0, len(resultlist)):
-        if resultlist[i][0][0] not in resultdict.keys():
-            resultdict[resultlist[i][0][0]]= resultlist[i][1:]
+        if resultlist[i][0] not in resultdict.keys():
+            resultdict[resultlist[i][0]] = resultlist[i][1:]
         else:
             for x in range(1, len(resultlist[i][1:])+1):
-                if resultlist[i][x][0] not in resultdict[resultlist[i][0][0]][x-1]:
-                    resultdict[resultlist[i][0][0]][x-1].append(resultlist[i][x][0])
+                if resultlist[i][x] not in resultdict[resultlist[i][0]][x-1]:
+                    resultdict[resultlist[i][0]][x-1]+=', '+(resultlist[i][x])
 
-    print(resultdict["13-LOX"])
-    print(resultdict["15-LOX"])
-    print(resultdict["9/13-LOX"])
+    resultlist2 = list()
+    for x in resultdict:
+        rtstr = list()
+        rtstr.append(x)
+        for i in resultdict[x]:
+            rtstr.append(i)
+        resultlist2.append(rtstr)
 
-
-    return render_template('resultspage.html', resultlist = resultlist)
+    return render_template('resultspage.html', resultlist = resultlist2)
 
 
 @app.route('/Graph<LOX_ID>/', methods=['POST', 'GET'])
