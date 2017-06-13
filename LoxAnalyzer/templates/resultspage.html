@@ -49,8 +49,20 @@
     </header>
 
     <form action = "/dbsearch" method = "POST">
-        <input type="text" name="searchword"/>
-        <input type="submit" name="Submit"/>
+        <select name="dropdown">
+                <option value="3-LOX">3-LOX</option>
+                <option value="5-LOX">5-LOX</option>
+                <option value="8-LOX">8-LOX</option>
+                <option value="9-LOX">9-LOX</option>
+                <option value="10-LOX">10-LOX</option>
+                <option value="11-LOX">11-LOX</option>
+                <option value="12-LOX">12-LOX</option>
+                <option value="13-LOX">13-LOX</option>
+                <option value="15-LOX">15-LOX</option>
+                <option value="9/13-LOX">9/13-LOX</option>
+                <option value="%LOX%">All</option>
+            </select>
+            <input type="submit" name="Submit"/>
     </form>
 
     <table>
@@ -71,11 +83,10 @@
             {% set app = row[1] %}
             {% set art = row[2] %}
             {% set pmids = art.split(",") %}
-            {% set date = row[3] %}
+            {% set dates = row[3].split(",") %}
             {% set aut = row[4] %}
             {% set key = row[5] %}
-            {% set org = row[6] %}
-            {% set seq = row[7] %}
+
 
             <tr>
                 <td>{{lox}}</td>
@@ -85,11 +96,15 @@
                     <a href = 'https://www.ncbi.nlm.nih.gov/pubmed/{{pmid}}'>{{pmid}}</a><br>
                     {% endfor %}
                 </td>
-                <td>{{date}}</td>
+                <td>
+                    {% for date in dates %}
+                        {{date}}<br>
+                    {% endfor %}
+                </td>
                 <td>{{aut}}</td>
                 <td>{{key}}</td>
-                <td>{{org}}</td>
-                <td><a href = 'https://www.ncbi.nlm.nih.gov/protein/{{seq}}'>{{seq}}</a></td>
+                <td>leeg</td>
+                <td><a href = 'https://www.ncbi.nlm.nih.gov/protein/'>pubmed</a></td>
             </tr>
         {% endfor %}
 
