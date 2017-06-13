@@ -1,6 +1,6 @@
 # Author:   Koen Rademaker
 # Date:     13/06/2017
-# Version:  0.6
+# Version:  0.7
 # Status:   In progress
 
 # Complete commentary for all functions
@@ -11,14 +11,12 @@
 # Complete debug commentary
 
 from Bio import Entrez
-Entrez.email = "daja.1998.g@gmail.com"
+Entrez.email = "koenrademaker@outlook.com"
 # Connection to Entrez services, edit the email address to prevent connection issues with connecting to PubMed.
 
 import cx_Oracle
-# dsnStr = cx_Oracle.makedsn("localhost", "1521", "orcl")
-# db = cx_Oracle.connect(user="hr", password="blaat1234", dsn=dsnStr)
-# cursor = db.cursor()
-db = cx_Oracle.connect('hr', 'blaat1234', 'localhost:1521/orcl')
+dsnStr = cx_Oracle.makedsn("localhost", "1521", "orcl")
+db = cx_Oracle.connect(user="hr", password="blaat1234", dsn=dsnStr)
 cursor = db.cursor()
 # Connection to the local database.
 
@@ -85,7 +83,11 @@ def text_mining_esummary(PMID):
 def text_mining_efetch(PMID):
     temp_keyword_list = []
     handle = Entrez.efetch(db="pubmed", id=PMID, rettype="pubmed")
-    record = handle.read()
+    try:
+        record = handle.read()
+    except UnicodeDecodeError:
+        print("DEBUG - Error reading XML file, skipped the item.")
+        return temp_keyword_list
     record_list = record.split("\n")
     handle.close()
 
@@ -128,7 +130,7 @@ def combine_query(lox, application):
 # Forms a query that formats multiple terms (LOXs, synonyms and applications) for a PubMed query.
 
 def text_retrieval():
-    for synonym_item in range(8, len(lox_synonym_list)):
+    for synonym_item in range(3, 10,6):
         print("DEBUG - Text retrieval for:", lox_synonym_list[synonym_item][0])
         keyword = lox_synonym_list[synonym_item][0]
         query = combine_query(keyword, "")
@@ -146,19 +148,19 @@ def text_retrieval():
                 try:
                     article_keyword_list = text_mining_efetch(article_id)
                     write_retrieval_to_database(article_id, article_year, article_author_list, article_keyword_list, keyword)
-                    print("DEBUG - Completed write_retrieval_to_database for", lox_synonym_list[synonym_item][0])
+                    print("DEBUG - Completed write_retrieval_to_database")
                     for article_keyword in article_keyword_list:
                         if article_keyword not in application_list:
                             application_list.append(article_keyword.lower())
                     print("DEBUG - Article keywords added to application_list")
                 except UnicodeDecodeError:
                     write_retrieval_to_database(article_id, article_year, article_author_list, "", keyword)
-                print("DEBUG - Completed write_retrieval_to_database for", lox_synonym_list[synonym_item][0])
+                print("DEBUG - Completed write_retrieval_to_database")
     print("DEBUG - COMPLETED text retrieval")
 # Loops through all LOXs and associated synonyms and performs text retrieval, returning data such as PubMed ID, a list of authors, year of publication and all keywords found in the article.
 
 def text_analysis():
-    for synonym_item in range(5, len(lox_synonym_list)):
+    for synonym_item in range(0, len(lox_synonym_list)):
         print("DEBUG - Text analysis for:", lox_synonym_list[synonym_item][0])
         lox_keyword = lox_synonym_list[synonym_item][0]
         for application in application_list:
@@ -204,19 +206,21 @@ def write_retrieval_to_database(pmid, year, author_list, keyword_list, soort_lox
 
         try:
             cursor.execute("""INSERT INTO AUTEURS VALUES (:aut_naam , :aut_id)""",
-                              aut_naam=author.encode("ascii", "ignore"),
+                              aut_naam=author,
                               aut_id=auteurs_id
                            )
             db.commit()
             print("DEBUG - Values inserted on auteurs_id", auteurs_id)
         except cx_Oracle.IntegrityError:
             cursor.execute("""SELECT AUTEURS_ID FROM AUTEURS WHERE AUTEUR_NAAM = :aut_naam""",
-                              aut_naam=author.encode("ascii", "ignore")
+                              aut_naam=author
                            )
             query_result = cursor.fetchall()
             query_result = query_result[0][0]
             auteurs_id = query_result
             print("DEBUG - Author exists, current auteurs_id is:", auteurs_id)
+        except UnicodeEncodeError:
+            print("DEBUG - Error with encoding of author name", author)
         # Attempt to insert an author for a PubMed article into the database. If the author already exists, it's ID will be copied for later use.
 
         try:
@@ -241,22 +245,22 @@ def write_retrieval_to_database(pmid, year, author_list, keyword_list, soort_lox
 
             try:
                 cursor.execute("""INSERT INTO KEYWORDS VALUES (:keyw , :keyw_id)""",
-                               # keyw = unicodedata.normalize('NFKD', unicodedata(keyword.lower(), "ISO-8859-1")).encode("ascii","ignore"),
-                               keyw = keyword.lower().encode("ascii", "ignore"),
-                               # keyw=keyword.lower(),
+                               keyw=keyword.lower(),
                                keyw_id=keywords_id
                                )
                 db.commit()
                 print("DEBUG - Values inserted on keywords_id", keywords_id)
             except cx_Oracle.IntegrityError:
                 cursor.execute("""SELECT KEYWORDS_ID FROM KEYWORDS WHERE KEYWORD = :keyw""",
-                               keyw=keyword.lower().encode("ascii", "ignore")
+                               keyw=keyword.lower()
                                )
                 query_result = cursor.fetchall()
                 query_result = query_result[0][0]
                 keywords_id = query_result
                 print("DEBUG - Keyword already exists, current keywords_id is", keywords_id)
             # Attempt to insert a keyword for a PubMed article into the database. If the keyword already exists, it's ID will be copied for later use.
+            except UnicodeEncodeError:
+                print("DEBUG - Error with encoding of author name", keyword)
 
             try:
                 cursor.execute("""INSERT INTO REL_KEYW_PUBL VALUES (:keyw_id , :publ_id)""",
@@ -334,7 +338,7 @@ def write_analysis_to_database():
 # *Requires commentary*
 
 def main():
-    #text_retrieval()
+    text_retrieval()
     text_analysis()
     write_analysis_to_database()
 

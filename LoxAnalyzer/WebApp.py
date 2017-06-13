@@ -62,6 +62,7 @@ def graph(LOX_ID):
                      FROM APPLICATIE, REL_APPL_STLOX
                      WHERE REL_APPL_STLOX.SOORT_LOX_SOORT_LOX_ID = """+LOX_ID+"""
                      AND REL_APPL_STLOX.APPLICATIE_APPLICATIE_ID = APPLICATIE.APPLICATIE_ID
+                     AND APPLICATIE.RELATION_COUNT > 5
                      """)
 
     applicaties = cursor.fetchall()
