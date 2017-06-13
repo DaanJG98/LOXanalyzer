@@ -33,7 +33,7 @@
 
 
         td{
-            border: 1px solid #dddddd;
+            border: 1px solid gray;
             text-align: left;
             padding: 8px;
         }
@@ -70,6 +70,7 @@
             {% set lox = row[0] %}
             {% set app = row[1] %}
             {% set art = row[2] %}
+            {% set pmids = art.split(",") %}
             {% set date = row[3] %}
             {% set aut = row[4] %}
             {% set key = row[5] %}
@@ -79,7 +80,11 @@
             <tr>
                 <td>{{lox}}</td>
                 <td><a href = "{{ url_for('graph', LOX_ID=app) }}">{{'Graphlink'}}</a></td>
-                <td><a href = 'https://www.ncbi.nlm.nih.gov/pubmed/{{art}}'>{{art}}</a></td>
+                <td>
+                    {% for pmid in pmids %}
+                    <a href = 'https://www.ncbi.nlm.nih.gov/pubmed/{{pmid}}'>{{pmid}}</a><br>
+                    {% endfor %}
+                </td>
                 <td>{{date}}</td>
                 <td>{{aut}}</td>
                 <td>{{key}}</td>
