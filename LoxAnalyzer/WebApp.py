@@ -12,12 +12,12 @@ def index():
 
 @app.route('/dbsearch', methods=['POST', 'GET'])
 def search():
-    text = request.form["dropdown"]
+    loxrequest = request.form["dropdown"]
     db = cx_Oracle.connect('hr', 'blaat1234', 'localhost:1521/orcl')
     cursor = db.cursor()
     cursor.execute("""SELECT SOORT_LOX.NAAM, SOORT_LOX.SOORT_LOX_ID, PUBLICATIE.PMID, PUBLICATIE.JAAR, AUTEURS.AUTEUR_NAAM, KEYWORDS.KEYWORD
                       FROM SOORT_LOX, APPLICATIE, PUBLICATIE, AUTEURS, KEYWORDS, REL_KEYW_PUBL, REL_PUBL_STLOX, REL_AUT_PUBL, REL_APPL_STLOX
-                      WHERE SOORT_LOX.NAAM LIKE '"""+text+"""'
+                      WHERE SOORT_LOX.NAAM LIKE '"""+loxrequest+"""'
                       AND APPLICATIE.APPLICATIE_ID = REL_APPL_STLOX.APPLICATIE_APPLICATIE_ID AND SOORT_LOX.SOORT_LOX_ID = REL_APPL_STLOX.SOORT_LOX_SOORT_LOX_ID
                       AND PUBLICATIE.PUBLICATIE_ID = REL_PUBL_STLOX.PUBLICATIE_PUBLICATIE_ID AND SOORT_LOX.SOORT_LOX_ID = REL_PUBL_STLOX.SOORT_LOX_SOORT_LOX_ID
                       AND PUBLICATIE.PUBLICATIE_ID = REL_AUT_PUBL.PUBLICATIE_PUBLICATIE_ID AND AUTEURS.AUTEURS_ID = REL_AUT_PUBL.AUTEURS_AUTEURS_ID
@@ -25,6 +25,7 @@ def search():
                       """)
 
     queryresult = cursor.fetchall()
+
     resultlist = list()
     for rij in queryresult:
         L = list()
@@ -85,7 +86,7 @@ def graph(LOX_ID):
     graphlist.append(countlijst)
     graphlist.append(edgelijst)
 
-    return render_template('Graphpage.html', lijst = graphlist)
+    return render_template('Graphpage.html', graaflijst = graphlist)
 
 
 if __name__ == '__main__':
