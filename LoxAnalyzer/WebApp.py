@@ -1,9 +1,9 @@
 # Author: Daan Gilissen
 # Date: 16-6-2017
-# Versie: 1.15
-# Status: ready for final inspection
+# Versie: 1.16
+# Status: final inspection completed
 # Known bugs: Slechte query zorgt voor een onoverzichtelijke tabel in de webpagina, hierdoor is ervoor gekozen om per kolom alleen de unieke waardes te tonen.
-#             Dit om duizende rijen van de tabel te voorkomen
+#             Dit om duizenden rijen van de tabel te voorkomen
 
 from flask import Flask, render_template, request
 import cx_Oracle
@@ -12,17 +12,17 @@ import collections
 app = Flask(__name__)
 
 
-# basic methode, retourneerd render_template met daarin het de html pagina van de homepage.
+# basic methode, retourneert render_template met daarin het de html-pagina van de homepage.
 @app.route('/')
 def index():
     return render_template('homepage.html')
 
 
 # Methode die aan de hand van geselecteerd soort LOX de database doorzoekt
-# Methode retourneerd een lijst die wordt gebruikt voor de visualisatie van een tabel in 'resultspage.html'
+# Methode retourneert een lijst die wordt gebruikt voor de visualisatie van een tabel in 'resultspage.html'
 @app.route('/dbsearch', methods=['POST', 'GET'])
 def search():
-    # invoer van gebruiker afkomstig van 'homepage.html' of 'resultpage.html' bevat een soort LOX waarop gezocht wordt.
+    # Invoer van gebruiker afkomstig van 'homepage.html' of 'resultpage.html' bevat een soort LOX waarop gezocht wordt.
     loxrequest = request.form["dropdown"]
 
     # maakt connectie met lokale database, 'gebruiker', 'wachtwoord', 'locatie:poort/database'
