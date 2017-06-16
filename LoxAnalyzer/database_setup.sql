@@ -1,0 +1,167 @@
+-- Auteur:	Koen Rademaker
+-- Datum:	16/06/2017
+-- Versie:	1.0
+-- Status:	Compleet
+
+-- Benodigd voor het opzetten van de database en de werking van de applicatie.
+
+CREATE TABLE Applicatie
+  (
+    Woord1         VARCHAR2 (4000) NOT NULL ,
+    Woord2         VARCHAR2 (4000) NOT NULL ,
+    Relation_count INTEGER NOT NULL ,
+    Applicatie_ID  NUMBER NOT NULL
+  );
+ALTER TABLE Applicatie ADD CONSTRAINT Applicatie_PK PRIMARY KEY ( Applicatie_ID );
+
+
+CREATE TABLE Auteurs
+  (
+    Auteur_naam VARCHAR2 (4000) NOT NULL ,
+    Auteurs_ID  NUMBER NOT NULL
+  );
+ALTER TABLE Auteurs ADD CONSTRAINT Auteurs_PK PRIMARY KEY ( Auteurs_ID );
+ALTER TABLE Auteurs ADD CONSTRAINT Auteurs__UN_Naam UNIQUE ( Auteur_naam );
+
+
+CREATE TABLE Keywords
+  (
+    Keyword     VARCHAR2 (4000) NOT NULL ,
+    Keywords_ID NUMBER NOT NULL
+  );
+ALTER TABLE Keywords ADD CONSTRAINT Keywords_PK PRIMARY KEY ( Keywords_ID );
+ALTER TABLE Keywords ADD CONSTRAINT Keywords__UN_Keyw UNIQUE ( Keyword );
+
+
+CREATE TABLE Organisme
+  (
+    Naam         VARCHAR2 (4000) NOT NULL ,
+    Organisme_ID NUMBER NOT NULL
+  );
+ALTER TABLE Organisme ADD CONSTRAINT Organisme_PK PRIMARY KEY ( Organisme_ID );
+ALTER TABLE Organisme ADD CONSTRAINT Organisme__UN_Naam UNIQUE ( Naam );
+
+
+CREATE TABLE Publicatie
+  (
+    PMID          INTEGER NOT NULL ,
+    Jaar          INTEGER NOT NULL ,
+    Publicatie_ID NUMBER NOT NULL
+  );
+ALTER TABLE Publicatie ADD CONSTRAINT Publicatie_PK PRIMARY KEY ( Publicatie_ID );
+ALTER TABLE Publicatie ADD CONSTRAINT Publicatie__UN_PMID UNIQUE ( PMID );
+
+
+CREATE TABLE Rel_Appl_StLOX
+  (
+    Applicatie_Applicatie_ID NUMBER NOT NULL ,
+    soort_LOX_soort_LOX_ID   NUMBER NOT NULL
+  );
+ALTER TABLE Rel_Appl_StLOX ADD CONSTRAINT Rel_Appl_StLOX_PK PRIMARY KEY ( Applicatie_Applicatie_ID, soort_LOX_soort_LOX_ID );
+
+
+CREATE TABLE Rel_Aut_Publ
+  (
+    Auteurs_Auteurs_ID       NUMBER NOT NULL ,
+    Publicatie_Publicatie_ID NUMBER NOT NULL
+  );
+ALTER TABLE Rel_Aut_Publ ADD CONSTRAINT Rel_Aut_Publ_PK PRIMARY KEY ( Auteurs_Auteurs_ID, Publicatie_Publicatie_ID );
+
+
+CREATE TABLE Rel_Keyw_Publ
+  (
+    Keywords_Keywords_ID     NUMBER NOT NULL ,
+    Publicatie_Publicatie_ID NUMBER NOT NULL
+  );
+ALTER TABLE Rel_Keyw_Publ ADD CONSTRAINT Rel_Keyw_Publ_PK PRIMARY KEY ( Keywords_Keywords_ID, Publicatie_Publicatie_ID );
+
+
+CREATE TABLE Rel_Publ_StLOX
+  (
+    Publicatie_Publicatie_ID NUMBER NOT NULL ,
+    soort_LOX_soort_LOX_ID   NUMBER NOT NULL
+  );
+ALTER TABLE Rel_Publ_StLOX ADD CONSTRAINT Rel_Publ_StLOX_PK PRIMARY KEY ( Publicatie_Publicatie_ID, soort_LOX_soort_LOX_ID );
+
+
+CREATE TABLE Sequentie
+  (
+    ID_version             INTEGER NOT NULL ,
+    Organisme_Organisme_ID NUMBER NOT NULL ,
+    soort_LOX_soort_LOX_ID NUMBER NOT NULL ,
+    Sequentie_ID           NUMBER NOT NULL
+  );
+ALTER TABLE Sequentie ADD CONSTRAINT Sequentie_PK PRIMARY KEY ( Sequentie_ID );
+
+
+CREATE TABLE soort_LOX
+  (
+    Naam         VARCHAR2 (10) NOT NULL ,
+    soort_LOX_ID NUMBER NOT NULL
+  );
+ALTER TABLE soort_LOX ADD CONSTRAINT soort_LOX_PK PRIMARY KEY ( soort_LOX_ID );
+ALTER TABLE soort_LOX ADD CONSTRAINT soort_LOX__UN_Naam UNIQUE ( Naam );
+
+
+ALTER TABLE Rel_Appl_StLOX ADD CONSTRAINT FK_ASS_1 FOREIGN KEY ( Applicatie_Applicatie_ID ) REFERENCES Applicatie ( Applicatie_ID );
+ALTER TABLE Rel_Appl_StLOX ADD CONSTRAINT FK_ASS_2 FOREIGN KEY ( soort_LOX_soort_LOX_ID ) REFERENCES soort_LOX ( soort_LOX_ID );
+ALTER TABLE Rel_Aut_Publ ADD CONSTRAINT FK_ASS_3 FOREIGN KEY ( Auteurs_Auteurs_ID ) REFERENCES Auteurs ( Auteurs_ID );
+ALTER TABLE Rel_Aut_Publ ADD CONSTRAINT FK_ASS_4 FOREIGN KEY ( Publicatie_Publicatie_ID ) REFERENCES Publicatie ( Publicatie_ID );
+ALTER TABLE Rel_Keyw_Publ ADD CONSTRAINT FK_ASS_5 FOREIGN KEY ( Keywords_Keywords_ID ) REFERENCES Keywords ( Keywords_ID );
+ALTER TABLE Rel_Keyw_Publ ADD CONSTRAINT FK_ASS_6 FOREIGN KEY ( Publicatie_Publicatie_ID ) REFERENCES Publicatie ( Publicatie_ID );
+ALTER TABLE Rel_Publ_StLOX ADD CONSTRAINT FK_ASS_8 FOREIGN KEY ( Publicatie_Publicatie_ID ) REFERENCES Publicatie ( Publicatie_ID );
+ALTER TABLE Rel_Publ_StLOX ADD CONSTRAINT FK_ASS_9 FOREIGN KEY ( soort_LOX_soort_LOX_ID ) REFERENCES soort_LOX ( soort_LOX_ID );
+ALTER TABLE Sequentie ADD CONSTRAINT Sequentie_Organisme_FK FOREIGN KEY ( Organisme_Organisme_ID ) REFERENCES Organisme ( Organisme_ID );
+ALTER TABLE Sequentie ADD CONSTRAINT Sequentie_soort_LOX_FK FOREIGN KEY ( soort_LOX_soort_LOX_ID ) REFERENCES soort_LOX ( soort_LOX_ID );
+
+INSERT INTO SOORT_LOX VALUES ('3-LOX', 1);
+INSERT INTO SOORT_LOX VALUES ('5-LOX', 2);
+INSERT INTO SOORT_LOX VALUES ('8-LOX', 3);
+INSERT INTO SOORT_LOX VALUES ('9-LOX', 4);
+INSERT INTO SOORT_LOX VALUES ('9/13-LOX', 5);
+INSERT INTO SOORT_LOX VALUES ('10-LOX', 6);
+INSERT INTO SOORT_LOX VALUES ('11-LOX', 7);
+INSERT INTO SOORT_LOX VALUES ('12-LOX', 8);
+INSERT INTO SOORT_LOX VALUES ('12/15-LOX', 9);
+INSERT INTO SOORT_LOX VALUES ('13-LOX', 10);
+INSERT INTO SOORT_LOX VALUES ('15-LOX', 11);
+
+INSERT INTO PUBLICATIE VALUES (25641326, 2016, 1);
+
+INSERT INTO AUTEURS VALUES ('Heshof R', 1);
+INSERT INTO AUTEURS VALUES ('de Graaff LH', 2);
+INSERT INTO AUTEURS VALUES ('Villaverde JJ', 3);
+INSERT INTO AUTEURS VALUES ('Silvestre AJ', 4);
+INSERT INTO AUTEURS VALUES ('Haarmann T4', 5);
+INSERT INTO AUTEURS VALUES ('Dalsgaard TK', 6);
+INSERT INTO AUTEURS VALUES ('Buchert J', 7);
+
+INSERT INTO KEYWORDS VALUES ('application', 1);
+INSERT INTO KEYWORDS VALUES ('bleaching', 2);
+INSERT INTO KEYWORDS VALUES ('hydroperoxide', 3);
+INSERT INTO KEYWORDS VALUES ('lipoxygenase', 4);
+INSERT INTO KEYWORDS VALUES ('oleochemistry', 5);
+INSERT INTO KEYWORDS VALUES ('oxylipin', 6);
+INSERT INTO KEYWORDS VALUES ('unsaturated fatty acid', 7);
+
+INSERT INTO APPLICATIE VALUES ('5-LOX', 'immune response', 3, 1);
+
+INSERT INTO REL_APPL_STLOX VALUES (1, 2);
+
+INSERT INTO REL_AUT_PUBL VALUES (1, 1);
+INSERT INTO REL_AUT_PUBL VALUES (2, 1);
+INSERT INTO REL_AUT_PUBL VALUES (3, 1);
+INSERT INTO REL_AUT_PUBL VALUES (4, 1);
+INSERT INTO REL_AUT_PUBL VALUES (5, 1);
+INSERT INTO REL_AUT_PUBL VALUES (6, 1);
+INSERT INTO REL_AUT_PUBL VALUES (7, 1);
+
+INSERT INTO REL_KEYW_PUBL VALUES (1, 1);
+INSERT INTO REL_KEYW_PUBL VALUES (2, 1);
+INSERT INTO REL_KEYW_PUBL VALUES (3, 1);
+INSERT INTO REL_KEYW_PUBL VALUES (4, 1);
+INSERT INTO REL_KEYW_PUBL VALUES (5, 1);
+INSERT INTO REL_KEYW_PUBL VALUES (6, 1);
+INSERT INTO REL_KEYW_PUBL VALUES (7, 1);
+
+INSERT INTO REL_PUBL_STLOX VALUES (1, 2);
