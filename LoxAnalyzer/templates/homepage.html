@@ -4,41 +4,40 @@
     <meta charset="UTF-8">
     <title>Home page</title>
     <style>
-.flex-container > * {
-    padding: 15px;
-    -webkit-flex: 1 100%;
-    flex: 1 100%;
-}
+        .flex-container > * {
+            padding: 15px;
+             -webkit-flex: 1 100%;
+            flex: 1 100%;
+        }
 
-header {
-    background: black;
-    color:white;
-    text-align: center;
-}
-footer {
-    background: #aaa;
-    color:black;
-    text-align: center;
-    position: fixed;
-    left: 10px;
-    bottom: 10px;
-    height: 30px;
-    width: 99%;
-}
+        header {
+            background: black;
+            color:white;
+            text-align: center;
+        }
+        footer {
+            background: #aaa;
+            color:black;
+            text-align: center;
+            position: fixed;
+            left: 10px;
+            bottom: 10px;
+            height: 30px;
+            width: 99%;
+        }
 
-.nav ul {
-    list-style-type: none;
-    padding: 0;
-}
-.nav ul a { text-align: center;
-    text-decoration: none;
-}
+        .nav ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .nav ul a { text-align: center;
+            text-decoration: none;
+        }
 
-@media all and (min-width: 768px) {
-    footer {-webkit-order:3;order:3;}
-}
-</style>
-{#    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">#}
+        @media all and (min-width: 768px) {
+            footer {-webkit-order:3;order:3;}
+        }
+    </style>
 </head>
 <body>
 

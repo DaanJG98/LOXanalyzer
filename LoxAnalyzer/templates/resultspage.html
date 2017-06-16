@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Resultpage</title>
-{#    <link rel=stylesheet type=text/css href="{{ url_for('static', filename='styles.css') }}">#}
     <style>
         header {
             background: black;
@@ -39,7 +38,6 @@
         }
 
         tr:nth-child(even) {background-color: #dddddd;}
-{#        tr:hover {background-color: #4d4d4d; color:white;}#}
 </style>
 
 </head>
@@ -69,7 +67,7 @@
     <table>
         <tr>
             <th>LOX</th>
-            <th>Applicatie(s)</th>
+            <th>Graaf</th>
             <th>Artikel</th>
             <th>Publicatiejaar</th>
             <th>Auteur(s)</th>
@@ -91,6 +89,7 @@
 
             <tr>
                 <td>{{lox}}</td>
+                // LOX-id dat in var app zit wordt meegegeven in de url zodat de juiste graaf kan worden gemaakt.
                 <td><a href = "{{ url_for('graph', LOX_ID=app) }}">{{'Graphlink'}}</a></td>
                 <td>
                     {% for pmid in pmids %}

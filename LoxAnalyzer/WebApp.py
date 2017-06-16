@@ -1,8 +1,9 @@
 # Author: Daan Gilissen
-# Date: 14-6-2017
-# Versie: 1.14
-# Status: Comments added (NL)
-# Known bugs:
+# Date: 16-6-2017
+# Versie: 1.15
+# Status: ready for final inspection
+# Known bugs: Slechte query zorgt voor een onoverzichtelijke tabel in de webpagina, hierdoor is ervoor gekozen om per kolom alleen de unieke waardes te tonen.
+#             Dit om duizende rijen van de tabel te voorkomen
 
 from flask import Flask, render_template, request
 import cx_Oracle
@@ -10,10 +11,12 @@ import collections
 
 app = Flask(__name__)
 
+
 # basic methode, retourneerd render_template met daarin het de html pagina van de homepage.
 @app.route('/')
 def index():
     return render_template('homepage.html')
+
 
 # Methode die aan de hand van geselecteerd soort LOX de database doorzoekt
 # Methode retourneerd een lijst die wordt gebruikt voor de visualisatie van een tabel in 'resultspage.html'
@@ -38,33 +41,35 @@ def search():
     queryresult = cursor.fetchall()
 
     # zet de data uit de zoekquery, een tuple, om in een nested list met daarin strings
-    resultlist = list()
+    querylist = list()
     for rij in queryresult:
         L = list()
         for item in rij:
             L.append(str(item))
-        resultlist.append(L)
+        querylist.append(L)
 
     # Geordende dictionairy wordt gemaakt waarbij soort LOXs als keys worden gebruikt, values zijn list met alleen unieke waardes.
-    resultdict = collections.OrderedDict()
-    for i in range(0, len(resultlist)):
-        if resultlist[i][0] not in resultdict.keys():
-            resultdict[resultlist[i][0]] = resultlist[i][1:]
+    querydict = collections.OrderedDict()
+    for i in range(0, len(querylist)):
+        if querylist[i][0] not in querydict.keys():
+            querydict[querylist[i][0]] = querylist[i][1:]
         else:
-            for x in range(1, len(resultlist[i][1:])+1):
-                if resultlist[i][x] not in resultdict[resultlist[i][0]][x-1]:
-                    resultdict[resultlist[i][0]][x-1]+=', '+(resultlist[i][x])
+            for x in range(1, len(querylist[i][1:])+1):
+                if querylist[i][x] not in querydict[querylist[i][0]][x-1]:
+                    querydict[querylist[i][0]][x-1]+=', '+(querylist[i][x])
 
-    # Gegevens uit de geordende dictionairy worden opgehaald en verwerkt zodat het in de tabel in html worden weergegeven.
-    resultlist2 = list()
-    for x in resultdict:
+    # Gegevens uit de geordende dictionairy worden opgehaald en verwerkt zodat het in de tabel in html kan worden weergegeven.
+    tabellijst = list()
+    for x in querydict:
         rtstr = list()
         rtstr.append(x)
-        for i in resultdict[x]:
+        for i in querydict[x]:
             rtstr.append(i)
-        resultlist2.append(rtstr)
+        tabellijst.append(rtstr)
 
-    return render_template('resultspage.html', resultlist = resultlist2)
+    # Roept html pagina met resultatentabel aan, lijst met rijen die moeten worden weergegeven in de tabel wordt meegegeven.
+    return render_template('resultspage.html', resultlist = tabellijst)
+
 
 # Methode die applicatiegegevens uit de database haalt en retourneerd waarmee een graaf mee wordt gemaakt.
 @app.route('/Graph<LOX_ID>/', methods=['POST', 'GET'])
