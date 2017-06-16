@@ -13,6 +13,5 @@ tussen LOXs en keywords.
 WebApp.py is de basis van de webapplicatie, van hieruit worden verschillende html pagina's aangeroepen. Ook wordt vanuit dit script connectie gemaakt
 met de lokale database.
 
--- statics bevat een .css file maar deze wordt niet gebruikt, om onbekende reden werkt de css niet of niet volledig. Hierdoor is er voor gekozen
--- om de styles in de html pagina's te verwerken.
+<-- statics bevat een .css file maar deze wordt niet gebruikt, om onbekende reden werkt de css niet of niet volledig. Hierdoor is er voor gekozen om de styles in de html pagina's te verwerken.-->
 
