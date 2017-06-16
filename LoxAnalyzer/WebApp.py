@@ -1,9 +1,9 @@
 # Author: Daan Gilissen
 # Date: 16-6-2017
-# Versie: 1.16
-# Status: final inspection completed
+# Versie: 2.0
+# Status: Complete
 # Known bugs: Slechte query zorgt voor een onoverzichtelijke tabel in de webpagina, hierdoor is ervoor gekozen om per kolom alleen de unieke waardes te tonen.
-#             Dit om duizenden rijen van de tabel te voorkomen
+#             Dit om duizenden rijen van de tabel te voorkomen, deze actie wordt uitgevoerd nadat de query resultaten zijn opgehaald.
 
 from flask import Flask, render_template, request
 import cx_Oracle
@@ -43,10 +43,10 @@ def search():
     # zet de data uit de zoekquery, een tuple, om in een nested list met daarin strings
     querylist = list()
     for rij in queryresult:
-        L = list()
+        queryrowitemlist = list()
         for item in rij:
-            L.append(str(item))
-        querylist.append(L)
+            queryrowitemlist.append(str(item))
+        querylist.append(queryrowitemlist)
 
     # Geordende dictionairy wordt gemaakt waarbij soort LOXs als keys worden gebruikt, values zijn list met alleen unieke waardes.
     querydict = collections.OrderedDict()
@@ -60,12 +60,12 @@ def search():
 
     # Gegevens uit de geordende dictionairy worden opgehaald en verwerkt zodat het in de tabel in html kan worden weergegeven.
     tabellijst = list()
-    for x in querydict:
-        rtstr = list()
-        rtstr.append(x)
-        for i in querydict[x]:
-            rtstr.append(i)
-        tabellijst.append(rtstr)
+    for keyvalueitem in querydict:
+        dictitemslist = list()
+        dictitemslist.append(keyvalueitem)
+        for i in querydict[keyvalueitem]:
+            dictitemslist.append(i)
+        tabellijst.append(dictitemslist)
 
     # Roept html pagina met resultatentabel aan, lijst met rijen die moeten worden weergegeven in de tabel wordt meegegeven.
     return render_template('resultspage.html', resultlist = tabellijst)
